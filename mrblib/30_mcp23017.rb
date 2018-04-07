@@ -1,6 +1,11 @@
 class MCP23017
   INPUT_HIGH = true
   INPUT_LOW = false
+  SUPPORTED_FREQ = [
+    100_000,
+    400_000,
+    1_700_000
+  ]
 
   DEFAULT_BANK = AddressBank0
 
@@ -29,13 +34,25 @@ class MCP23017
       end
   end
 
+  def read_pins
+    if @bank == AddressBank0
+      read(@bank::GPIOA, 2)
+    else
+      read(@bank::GPIOA) + read(@bank::GPIOB)
+    end
+  end
+
   # TODO: support read-only register
   #       - intfa/intfb
   #       - intcapa/intcapb
 
   private
 
-  def write(data)
-    @i2c.write(@addr, data)
+  def write(reg, data)
+    @i2c.write(@addr, reg, data)
+  end
+
+  def read(reg, n = 1)
+    @i2c.read(@addr, reg, n)
   end
 end
