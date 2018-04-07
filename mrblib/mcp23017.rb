@@ -32,4 +32,10 @@ class MCP23017
   # TODO: support read-only register
   #       - intfa/intfb
   #       - intcapa/intcapb
+
+  private
+
+  def write(data)
+    @i2c.write(@addr, data)
+  end
 end
